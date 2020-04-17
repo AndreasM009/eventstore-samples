@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: userqueryapi
+  labels:
+    app: eventstore-samples
+    component: userqueryapi
+spec:
+  ports:
+  - port: 80
+    targetPort: 5000
+  selector:
+    app: eventstore-samples
+    component: userqueryapi

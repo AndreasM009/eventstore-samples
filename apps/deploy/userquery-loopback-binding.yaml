@@ -1,0 +1,13 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: userquery-loopback-queue
+spec:
+  type: bindings.azure.servicebusqueues
+  metadata:
+    - name: connectionString
+      secretKeyRef:
+        name: servicebus-management
+        key: servicebus-management-connectionstring
+    - name: queueName
+      value: "userqueryloopback"

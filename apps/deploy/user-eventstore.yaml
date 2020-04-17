@@ -1,0 +1,13 @@
+apiVersion: eventstore.io/v1alpha1
+kind: Eventstore
+metadata:
+  name: usereventstore
+spec:
+  type: eventstore.azure.tablestorage
+  metadata:
+    - name: storageAccountName
+      value: ""
+    - name: storageAccountKey
+      value: ""
+    - name: tableNameSuffix
+      value: user

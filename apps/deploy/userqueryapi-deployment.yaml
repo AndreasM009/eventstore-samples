@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: userqueryapi
+  labels:
+    app: eventstore-samples
+    component: userqueryapi
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: eventstore-samples
+      component: userqueryapi
+  template:
+    metadata:
+      labels:
+        app: eventstore-samples
+        component: userqueryapi
+      annotations:
+        eventstore/enabled: "true"
+        eventstore/names: "usereventstore"
+        eventstore/port: "5600"
+        eventstore/appid: "userqueryapi"
+        dapr.io/enabled: "true"
+        dapr.io/id: "userqueryapi"
+        dapr.io/port: "5000"
+    spec:
+      containers:
+        - name: userqueryapi
+          image: m009/userqueryapi:0.18
+          imagePullPolicy: Always
+          env:
+          - name: EventstoreOptions__Port
+            value: "5600"
+          - name: EventstoreOptions__Name
+            value: usereventstore
+          - name: EventstoreOptions__Host
+            value: localhost
+          - name: EventstoreOptions__TopicName
+            value: usertopic
+          - name: "UserRepositoryOptions__ConnectionString"
+            value: "AccountEndpoint=https://anmockevt.documents.azure.com:443/;AccountKey=8CCV7ZzUpuIMbw8FFKjbyGlYye08HkaKNGaXEQrVQArFS4yoCGnnvFACz2fGaICAw9g8jwPB1un7aZ5qk5sjKA==;"
+          - name: "UserRepositoryOptions__DatabaseId"
+            value: "EventStoreSample"
+          - name: "UserRepositoryOptions__ContainerId"
+            value: "user"
+          - name: "UserRepositoryOptions__Throughput"
+            value: "400"
+          - name: LoopbackQueueOptions__UserOutputBindingName
+            value: "userquery-loopback-queue"
+          - name: "Logging__LogLevel__Default"
+            value: "Warning"
+          - name: "Logging__LogLevel__Eventstore.Samples.UserQuery.Api.Controllers.UserEventController"
+            value: "Information"

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: usercommandapi
+  labels:
+    app: eventstore-samples
+    component: usercommandapi
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: eventstore-samples
+      component: usercommandapi
+  template:
+    metadata:
+      labels:
+        app: eventstore-samples
+        component: usercommandapi
+      annotations:
+        eventstore/enabled: "true"
+        eventstore/names: "usereventstore"
+        eventstore/port: "5600"
+        eventstore/appid: "usercommandapi"
+        dapr.io/enabled: "true"
+        dapr.io/id: "usercommandapi"
+        dapr.io/port: "5000"
+    spec:
+      containers:
+        - name: usercommandapi
+          image: m009/usercommandapi:0.14
+          imagePullPolicy: Always
+          env:
+          - name: EventstoreOptions__Port
+            value: "5600"
+          - name: EventstoreOptions__Name
+            value: usereventstore
+          - name: EventstoreOptions__Host
+            value: localhost
+          - name: EventstoreOptions_TopicName
+            value: usertopic
